@@ -1,7 +1,10 @@
+import React from "react";
+import Expenses from "./components/Expenses";
+
 function App() {
   return (
-    <main className="container flex h-screen items-center justify-center">
-      <h1 className="text-left text-3xl font-extrabold">Expenses component</h1>
+    <main className="container mx-auto flex h-screen items-center justify-center">
+      <Expenses />
     </main>
   );
 }
