@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -14,14 +14,29 @@ import { useState } from "react";
 function Chart() {
   const [focusBar, setFocusBar] = useState(null);
   const [mouseLeave, setMouseLeave] = useState(true);
+  const [dataG, setDataG] = useState(JSON.parse(JSON.stringify(data)));
+
   const date = new Date();
   let day = date.getDay();
-  console.log(day);
+  if (day === 0) {
+    day = 7;
+  }
+
+  useEffect(() => {
+    const newData = dataG.map((data, index) => {
+      if (index === day) {
+        return { ...data, color: "hsl(186, 34%, 60%)" };
+      } else {
+        return { ...data, color: "hsl(10, 79%, 65%)" };
+      }
+    });
+    setDataG(newData);
+  }, []);
 
   return (
     <ResponsiveContainer width="100%" aspect={2}>
       <BarChart
-        data={data}
+        data={dataG}
         width={462}
         height={218}
         onMouseMove={(state) => {
@@ -34,14 +49,12 @@ function Chart() {
           }
         }}
       >
-        <Bar dataKey="amount" fill="hsl(10, 79%, 65%)" radius={[5, 5, 5, 5]}>
-          {data.map((entry, index) => (
+        <Bar dataKey="amount" fill={dataG.color} radius={[5, 5, 5, 5]}>
+          {dataG.map((entry, index) => (
             <Cell
               key={index}
               fill={
-                focusBar === index || mouseLeave
-                  ? "hsl(10, 79%, 75%)"
-                  : "hsl(10, 79%, 65%)"
+                focusBar === index || mouseLeave ? entry.color : entry.color
               }
             />
           ))}
